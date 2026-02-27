@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Emanuelle Confeitaria • Pedido</title>
+
+  <!-- ✅ OPEN GRAPH (WhatsApp Card) -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Emanuelle Confeitaria — Pedido"/>
+  <meta property="og:description" content="Confira o resumo do seu pedido e finalize pelo WhatsApp."/>
+  <meta property="og:image" content="https://SEUUSUARIO.github.io/NOMEDOREPO/preview-whatsapp/assets/share.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:url" content="https://SEUUSUARIO.github.io/NOMEDOREPO/preview-whatsapp/pedido.html"/>
+
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:image" content="https://SEUUSUARIO.github.io/NOMEDOREPO/preview-whatsapp/assets/share.png"/>
+
+  <style>
+    body{font-family:Arial,sans-serif;background:#f6ebe5;margin:0;padding:24px;color:#2a1a16}
+    .wrap{max-width:920px;margin:0 auto}
+    .card{background:rgba(255,255,255,.92);border-radius:18px;padding:18px;box-shadow:0 10px 28px rgba(0,0,0,.12)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .muted{opacity:.75;font-size:13px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(0,0,0,.12);
+      background:#fff;cursor:pointer;font-weight:700}
+    .btnPrimary{background:#7a4a3e;color:#fff;border-color:#7a4a3e}
+    textarea{width:100%;min-height:260px;border-radius:14px;border:1px solid rgba(0,0,0,.12);
+      padding:12px;font-family:ui-monospace,Consolas,monospace}
+    @media(max-width:800px){.row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h2 style="margin:0 0 6px 0;">Emanuelle Confeitaria</h2>
+      <div class="muted">Prévia do pedido para enviar no WhatsApp</div>
+      <div class="row" style="margin-top:14px;">
+        <div class="card" style="box-shadow:none;border:1px solid rgba(0,0,0,.08)">
+          <b>Link da página</b>
+          <div class="muted" style="margin:6px 0 10px 0;">
+            Envie este link primeiro no WhatsApp para aparecer o cartão (imagem).
+          </div>
+          <button class="btn" id="copyLink">Copiar link desta página</button>
+          <a class="btn" id="openLink" target="_blank" rel="noopener">Abrir página</a>
+        </div>
+
+        <div class="card" style="box-shadow:none;border:1px solid rgba(0,0,0,.08)">
+          <b>Texto do pedido</b>
+          <div class="muted" style="margin:6px 0 10px 0;">
+            Depois do link, cole/mande o texto abaixo.
+          </div>
+          <textarea id="txt"></textarea>
+          <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btnPrimary" id="copyText">Copiar texto</button>
+            <button class="btn" id="whats">Abrir WhatsApp</button>
+          </div>
+        </div>
+      </div>
+      <div class="muted" style="text-align:center;margin-top:12px;">
+        Dica: para forçar o Whats a atualizar o card, use &v=2 no final do link.
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ✅ Ajuste estes 2 valores depois de publicar:
+  const REPO_BASE = location.origin + location.pathname.replace(/\/preview-whatsapp\/pedido\.html.*$/, "") ;
+  const PAGE_URL  = REPO_BASE + "/preview-whatsapp/pedido.html";
+
+  function buildLink(id){
+    const url = new URL(PAGE_URL);
+    if(id) url.searchParams.set("id", id);
+    return url.toString();
+  }
+
+  const id = new URLSearchParams(location.search).get("id") || "";
+
+  const link = buildLink(id);
+  document.getElementById("openLink").href = link;
+  document.getElementById("copyLink").onclick = async ()=> {
+    await navigator.clipboard.writeText(link);
+    alert("Link copiado!");
+  };
+
+  const sample = `🍰 *Pedido* ${id ? ("#"+id) : ""}\n\n*Itens:*\n- 1x Produto (R$ 10,00)\n\n*Total:* R$ 10,00\n\nObrigada!`;
+  document.getElementById("txt").value = sample;
+
+  document.getElementById("copyText").onclick = async ()=>{
+    await navigator.clipboard.writeText(document.getElementById("txt").value);
+    alert("Texto copiado!");
+  };
+
+  document.getElementById("whats").onclick = ()=>{
+    const msg = link + "\n\n" + document.getElementById("txt").value;
+    window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank", "noopener");
+  };
+</script>
+</body>
+</html>
